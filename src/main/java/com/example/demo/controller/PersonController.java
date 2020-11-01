@@ -21,6 +21,11 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.Person;
 import com.example.demo.repository.PersonRepository;
 
+/***
+ * 
+ * @author Senthil
+ *
+ */
 @RestController
 @RequestMapping("/api/v1")
 public class PersonController {
@@ -99,4 +104,25 @@ public class PersonController {
 		return response;
 	}
 
+	@GetMapping("/persons/name/{name}")
+	public List<Person> getPersonByName(@PathVariable(value = "name") String name)
+			throws ResourceNotFoundException {
+		List<Person> byfirstName = personRepository.findByFirstName(name);
+		List<Person> byLastName = personRepository.findByLastName(name);
+	    byfirstName.addAll(byLastName);
+	  return byfirstName;
+	}
+	
+	@GetMapping("/persons/firstname/{firstname}")
+	public List<Person> getPersonByFirstName(@PathVariable(value = "firstname") String firstname)
+			throws ResourceNotFoundException {		
+	  return personRepository.findByFirstName(firstname);
+	}
+	
+	
+	@GetMapping("/persons/lastname/{lastname}")
+	public List<Person> getPersonByLastName(@PathVariable(value = "lastname") String lastname)
+			throws ResourceNotFoundException {		
+	  return personRepository.findByLastName(lastname);
+	}
 }

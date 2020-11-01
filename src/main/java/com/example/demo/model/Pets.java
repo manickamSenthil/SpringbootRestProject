@@ -17,26 +17,25 @@ import javax.persistence.ManyToOne;
 @Table(name = "pets")
 public class Pets {
 	
-    private int id;
+    private long id;
 	private String petName;
 	private String petAge;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
+	  public long getId() {
+			return id;
+		}
+
+		public void setId(long id) {
+			this.id = id;
+		}
 	
 	public Pets() {
 
     }
 
-	
-
-    private Person person;
+	private Person person;
 	
 	
 	public Pets(String petName,String petAge,Person person) {

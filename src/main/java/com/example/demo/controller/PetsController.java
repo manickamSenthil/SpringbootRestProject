@@ -1,12 +1,13 @@
 package com.example.demo.controller;
 
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,12 +33,12 @@ public class PetsController {
     @Autowired
     private PersonRepository personRepository;
 
-    @GetMapping("/persons/{personId}/Pets")
+    @GetMapping("/persons/{personId}/pets")
     public List <Pets> getPetssByInstructor(@PathVariable(value = "personId") Long personId) {
         return petsRepository.findByPersonId(personId);
     }
 
-    @PostMapping("/persons/{personId}/Pets")
+    @PostMapping("/persons/{personId}/pets")
     public Pets createPets(@PathVariable(value = "personId") Long personId,
         @Valid @RequestBody Pets pets) throws ResourceNotFoundException {
         return personRepository.findById(personId).map(person -> {
@@ -46,7 +47,7 @@ public class PetsController {
         }).orElseThrow(() -> new ResourceNotFoundException("person not found"));
     }
 
-    @PutMapping("/persons/{personId}/Pets/{petsId}")
+    @PutMapping("/persons/{personId}/pets/{petsId}")
     public Pets updatePets(@PathVariable(value = "personId") Long personId,
         @PathVariable(value = "petsId") Long petsId, @Valid @RequestBody Pets petsRequest)
     throws ResourceNotFoundException {
@@ -56,18 +57,21 @@ public class PetsController {
 
         return petsRepository.findById(petsId).map(pets -> {
         	pets.setPetName(petsRequest.getPetName());
+        	pets.setPetAge(petsRequest.getPetAge());
             return petsRepository.save(pets);
         }).orElseThrow(() -> new ResourceNotFoundException("Pets id not found"));
     }
 
-    @DeleteMapping("/persons/{personId}/Pets/{petsId}")
-    public ResponseEntity < ? > deletePets(@PathVariable(value = "personId") Long personId,
+    @DeleteMapping("/persons/{personId}/pets/{petsId}")
+    public Map<String, Boolean> deletePets(@PathVariable(value = "personId") Long personId,
         @PathVariable(value = "petsId") Long petsId) throws ResourceNotFoundException {
-        return petsRepository.findByIdAndPersonId(petsId, personId).map(pets -> {
+         return petsRepository.findByIdAndPersonId(petsId, personId).map(pets -> {
             petsRepository.delete(pets);
-            return ResponseEntity.ok().build();
+            Map<String, Boolean> response = new HashMap<>();
+     		response.put("deleted", Boolean.TRUE);
+     		return response;
         }).orElseThrow(() -> new ResourceNotFoundException(
-            "Pets not found with id " + petsId + " and personId " + personId));
+            "Pets not found with pet id " + petsId + " and personId " + personId));
     }
 	
 }
