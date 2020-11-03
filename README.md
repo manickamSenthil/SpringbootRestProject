@@ -2,9 +2,9 @@ There are two roles
 
 admin (ALL rights)
 user (ALL rights except to update the address)
-admin cridencial user name : admin password : admin
+admin credential user name : admin password : admin
 
-user cridencial user name : user, password : user
+user credential user name : user, password : user
 
 H2 database: http://localhost:8080/h2-console/,
  JDBC URL : jdbc:h2:mem:tcs,
