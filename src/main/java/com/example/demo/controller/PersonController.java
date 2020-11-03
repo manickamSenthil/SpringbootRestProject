@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.exception.ResourceNotFoundException;
@@ -124,5 +125,11 @@ public class PersonController {
 	public List<Person> getPersonByLastName(@PathVariable(value = "lastname") String lastname)
 			throws ResourceNotFoundException {		
 	  return personRepository.findByLastName(lastname);
+	}
+	
+	@GetMapping("/persons/bothName")
+	public List<Person> getPersonByBothName(@RequestParam(name = "firstName") String firstName, @RequestParam(name = "lastName") String lastName)
+			throws ResourceNotFoundException {		
+	  return personRepository.findByFirstNameAndLastName(firstName,lastName);
 	}
 }
